@@ -1,2 +1,0 @@
-Acc No.		Last Name	First Name	Balance
-24		kingdm		neil		-4.66

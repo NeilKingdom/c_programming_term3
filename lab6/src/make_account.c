@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "makeaccount.h"
+#include "make_account.h"
 
 #define LEN	sizeof(clientInfo)
 
@@ -25,9 +25,9 @@ Purpose: This file contains functions for managing user's banking accounts. It c
 Function: textFile
 Author: Neil Kingdom
 Version: 1.0
-Params: N/A 
+Params: N/A
 Returns: Returns the exit status of the function
-Purpose: This function exports the properly fomatted account data held in the binary file 
+Purpose: This function exports the properly fomatted account data held in the binary file
 	'credit.dat' to a new text file 'accounts.txt'. If the file accounts.txt does not exist
 	it is created before the export. Additionally, it overwrites any previously existing
 	information with the information it recieves from credit.dat
@@ -52,15 +52,15 @@ int textFile() {
 	/*Write client accounts to accounts.txt*/
 	fputs("Acc No.\t\tLast Name\tFirst Name\tBalance\n", out);
 	for(i = 1; i <= 100+1; i++) {
-		fread(&temp, LEN, 1, in); 
+		fread(&temp, LEN, 1, in);
 		if(temp.AccNo != 0)
 			fprintf(out, "%d\t\t%s\t\t%s\t\t%.2f\n", temp.AccNo, temp.lastName, temp.firstName, temp.accBalance);
-	}	
+	}
 
 	fclose(in);
 	fclose(out);
-	
-	printf("Accounts were successfully output to accounts.txt\n");	
+
+	printf("Accounts were successfully output to accounts.txt\n");
 	return 0;
 }
 
@@ -68,11 +68,11 @@ int textFile() {
 Function: updateRecord
 Author: Neil Kingdom
 Version: 1.0
-Params: acc_no - the account number belonging to the user to be updated 
+Params: acc_no - the account number belonging to the user to be updated
 Returns: Returns the exit status of the function
 Purpose: This function updates existing account balances. It first seeks the account using
 	the user's account no. as an offset, then overwrites it with the changes made by the
-	user. The function first checks that the account exists before updating. 
+	user. The function first checks that the account exists before updating.
 ********************************************************************************************/
 int updateRecord(int acc_no) {
 	FILE *fp;
@@ -86,7 +86,7 @@ int updateRecord(int acc_no) {
 		return -1;
 	}
 
-	/*Check if record exists*/		
+	/*Check if record exists*/
 	fseek(fp, acc_no * LEN, SEEK_SET);
 	fread(&update, LEN, 1, fp);
 
@@ -108,7 +108,7 @@ int updateRecord(int acc_no) {
 		if(sign == '+') {
 			printf("Added %.2f to account balance\n", balance);
 			update.accBalance += balance;
-   	}   
+   	}
 		else if(sign == '-') {
 			printf("Subtracted %.2f from account balance\n", balance);
 			update.accBalance -= balance;
@@ -116,12 +116,12 @@ int updateRecord(int acc_no) {
 		printf("%d\t%s %s\t%.2f\n", acc_no, update.firstName, update.lastName, update.accBalance);
 	}
 
-	fseek(fp, acc_no * LEN, SEEK_SET); 
+	fseek(fp, acc_no * LEN, SEEK_SET);
 	if(fwrite(&update, LEN, 1, fp) > 0) {
 		printf("Account successfully updated\n");
 	}
    else {
-   	printf("Could not update account!\n"); 
+   	printf("Could not update account!\n");
 	}
 
 	fclose(fp);
@@ -134,12 +134,12 @@ Author: Neil Kingdom
 Version: 1.0
 Params: acc_no - the account number for the new user, fname - the first name of the new
 	user, lname - the last name of the new user, balance - the initial balance of the new
-	user 
+	user
 Returns: Returns the exit status of the function
 Purpose: This function adds a new account into credit.dat. menu.c first checks that the
 	account does not already exist so that no accounts are overwritten. If the poisiton is
-	available in the file, it is randomly accessed and the new user is written at the 
-	correct offset 
+	available in the file, it is randomly accessed and the new user is written at the
+	correct offset
 ********************************************************************************************/
 int newRecord(int acc_no, char *fname, char *lname, double balance) {
 	FILE *fp;
@@ -165,7 +165,7 @@ int newRecord(int acc_no, char *fname, char *lname, double balance) {
 		printf("Account successfully added to credit.dat\n");
 	}
    else {
-   	printf("Could not write to file!\n"); 
+   	printf("Could not write to file!\n");
 	}
 
 	fclose(fp);
@@ -185,12 +185,12 @@ Purpose: This function deletes an existing account from credit.dat. First, it ch
 int deleteRecord(int acc_no) {
 	FILE *fp;
 	clientInfo delete;
-	
+
 	if((fp = fopen("credit.dat", "rb+")) == NULL) {
 		printf("Could not open file 'credit.dat'\n");
 		fclose(fp);
 		return -1;
-	} 
+	}
 
 	fseek(fp, acc_no * LEN, SEEK_SET);
 	fread(&delete, LEN, 1, fp);
@@ -206,14 +206,14 @@ int deleteRecord(int acc_no) {
 	strcpy(delete.firstName, "");
 	strcpy(delete.lastName, "");
 	delete.accBalance = 0.0;
-	
+
 	/*Reinitialize account*/
 	fseek(fp, acc_no * LEN, SEEK_SET);
 	if(fwrite(&delete, LEN, 1, fp) > 0) {
 		printf("Account successfully deleted from credit.dat\n");
 	}
    else {
-   	printf("Could not delete entry!\n"); 
+   	printf("Could not delete entry!\n");
 	}
 
 	fclose(fp);

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "makeaccount.h"
+#include "make_account.h"
 
 /**************************************************************************
 Author: Neil Kingdom
@@ -40,31 +40,31 @@ int prompt(int floor, int ceil, int digits) {
       if(len > digits) {
          printf("Input has more digits than expected.\nPlease try again: ");
 			exit = 1;
-      }  
-	
+      }
+
 		/*Check if any characters exist*/
 		if(exit == 0) {
 			for(i = 0; i < len; i++) {
 				if(*(input+i) < '0' || *(input+i) > '9') {
 					printf("Must enter a valid integer.\nPlease try again: ");
 					exit = 1;
-					break;	
+					break;
 				}
 			}
 		}
 
 		/*Put string into integer form*/
 		if(exit == 0) {
-			rtn = i = 0;  
-			len = strlen(input)-1; 
+			rtn = i = 0;
+			len = strlen(input)-1;
 			while(i < len) {
-				rtn += pow(10, i) * (input[len-i-1]-'0'); 
+				rtn += pow(10, i) * (input[len-i-1]-'0');
 				i++;
-			}  
+			}
 		}
-		
+
 		if(exit == 0 && (rtn < floor || rtn > ceil)) {
-			printf("Number is out of bounds.\nPlease try again: "); 
+			printf("Number is out of bounds.\nPlease try again: ");
 			exit = 1;
 		}
    } while(exit);
@@ -77,7 +77,7 @@ int prompt(int floor, int ceil, int digits) {
 Function: main
 Author: Neil Kingdom
 Version: 1.0
-Params: N/A 
+Params: N/A
 Returns: Returns the exit status of the program
 Purpose: The main function contains the program loop that will display
 	the menu and call functions from makeaccounts.h based on user input.
@@ -90,10 +90,10 @@ int main(void) {
 	FILE *fp;
 	clientInfo randomClient = {0, "", "", 0.0};
 
-	/******* INIT CREDIT.DAT *******/	
+	/******* INIT CREDIT.DAT *******/
 	if((fp = fopen("credit.dat", "wb")) == NULL) {
 		printf("Error opening file 'credit.dat'\n");
-	}	
+	}
 	else {
 		for(i = 1; i <= 100; i++) {
 			fwrite(&randomClient, sizeof(clientInfo), 1, fp);
@@ -126,9 +126,9 @@ int main(void) {
       			printf("Could not open file 'credit.dat'\n");
       			fclose(fp);
 					break;
-   			}   
+   			}
 
-   			/*Check if record already exists*/    
+   			/*Check if record already exists*/
 				printf("Please enter the account number for the new client (1-100): ");
 				acc_no = prompt(1, 100, 3);
    			fseek(fp, acc_no * sizeof(clientInfo), SEEK_SET);
@@ -138,8 +138,8 @@ int main(void) {
       			printf("Account %d already exists and cannot be overwitten\n", acc_no);
       			fclose(fp);
 					break;
-   			}   
-				
+   			}
+
 				printf("Please enter the first name of the client: ");
 				scanf("%s", fname);
 				printf("Please enter the first name of the client: ");
@@ -159,7 +159,7 @@ int main(void) {
 				printf("Exiting...\n");
 				loop = 0;
 				break;
-		}	
-	}	
+		}
+	}
 	return 0;
 }
